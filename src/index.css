@@ -1,3 +1,40 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer utilities{
+    .sortable{
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .sortable::before, .sortable::after{
+        content: '';
+        position: absolute;
+        right: 0;
+        border: 6px solid transparent;
+    }
+    
+    .sortable:hover::before,
+    .sortable.desc::before{
+        border-bottom-color: #a7a7a7;
+        top: 7px;
+    }
+    .sortable:hover::after,
+    .sortable.asc::after{
+        border-top-color: #a7a7a7;
+        bottom: 7px;
+    }
+    
+    .sortable.asc::before{
+        border-bottom-color: green;
+        top: 7px;
+    }
+    
+    
+    .sortable.desc::after{
+        border-top-color: green;
+        bottom: 7px;
+    }
+}

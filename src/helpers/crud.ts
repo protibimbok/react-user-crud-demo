@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useState } from 'react';
 import type { UserModel } from "../types/model";
 
@@ -108,25 +109,23 @@ export interface Sorting<T>{
 
 
 export function useSorter<T>(initial: T, order: SortType = 'desc'): [Sorting<T>, (by: T) => Sorting<T>] {
-    let sort_by = initial;
-    let sort_type = order;
-    const [sorted, setSorted] = useState<Sorting<T>>({
-        by: sort_by,
-        order: sort_type
+    const sortedRef = useRef<Sorting<T>>({
+        by: initial,
+        order
     });
+    const [sorted, setSorted] = useState<Sorting<T>>(sortedRef.current);
     return [
         sorted,
         (by: T):Sorting<T> => {
-            if(sort_by == by){
-                sort_type = sort_type === 'desc' ? 'asc' : 'desc';
+            if(sortedRef.current.by == by){
+                sortedRef.current.order = sortedRef.current.order === 'desc' ? 'asc' : 'desc';
             }else{
-                sort_by = by;
-                sort_type = order;
+                sortedRef.current = {
+                    by,
+                    order
+                }
             }
-            const newSorted = {
-                by: sort_by,
-                order: sort_type
-            }
+            const newSorted = {...sortedRef.current};
             setSorted(newSorted);
             return newSorted;
         }

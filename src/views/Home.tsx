@@ -116,19 +116,17 @@ export const Home = (): any => {
 };
 
 function useUserStore() {
-  const [sorted, sortBy] = useSorter<any>("name");
+  let [sorted, sortBy] = useSorter<any>("name");
   let [users, setUsers] = useState<UserModel[]>(getUsers());
   const sort = (by: string) => {
-    sortBy(by);
+    sorted = sortBy(by);
     if (by == "id") {
       if (sorted.order == "asc") {
         users = getUsers();
       } else {
         users = getUsers().reverse();
       }
-      return;
-    }
-    if (sorted.order == "asc") {
+    }else if (sorted.order == "asc") {
       //@ts-ignore
       users.sort((a: any, b: any) => {
         if (a[by] < b[by]) {
